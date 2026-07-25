@@ -805,7 +805,7 @@ img{ max-width:100%; display:block; }
         </div>
       </div>
       <div class="pcard__footer">
-        <a href="https://github.com/JuhiBM" target="_blank" rel="noopener">
+        <a href="https:https://github.com/JuhiBM/Project_2/tree/main/Movie-recommender" target="_blank" rel="noopener">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 .3a12 12 0 00-3.8 23.4c.6.1.8-.3.8-.6v-2.2c-3.3.7-4-1.6-4-1.6-.6-1.4-1.4-1.8-1.4-1.8-1.1-.8.1-.8.1-.8 1.3.1 1.9 1.3 1.9 1.3 1.1 1.9 3 1.4 3.7 1 .1-.8.5-1.4.8-1.7-2.7-.3-5.5-1.3-5.5-6a4.6 4.6 0 011.3-3.2 4.3 4.3 0 01.1-3.2s1-.3 3.4 1.2a11.5 11.5 0 016 0c2.3-1.5 3.3-1.2 3.3-1.2a4.3 4.3 0 01.2 3.2 4.6 4.6 0 011.2 3.2c0 4.7-2.8 5.7-5.5 6 .5.4.9 1.2.9 2.5v3.6c0 .3.2.7.8.6A12 12 0 0012 .3z"/></svg>
           view code
         </a>
@@ -829,7 +829,7 @@ img{ max-width:100%; display:block; }
         </div>
       </div>
       <div class="pcard__footer">
-        <a href="https://github.com/JuhiBM" target="_blank" rel="noopener">
+        <a href="https://github.com/JuhiBM/Project_2/tree/main/Schemesense-Gov%20scheme%20recommender" target="_blank" rel="noopener">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 .3a12 12 0 00-3.8 23.4c.6.1.8-.3.8-.6v-2.2c-3.3.7-4-1.6-4-1.6-.6-1.4-1.4-1.8-1.4-1.8-1.1-.8.1-.8.1-.8 1.3.1 1.9 1.3 1.9 1.3 1.1 1.9 3 1.4 3.7 1 .1-.8.5-1.4.8-1.7-2.7-.3-5.5-1.3-5.5-6a4.6 4.6 0 011.3-3.2 4.3 4.3 0 01.1-3.2s1-.3 3.4 1.2a11.5 11.5 0 016 0c2.3-1.5 3.3-1.2 3.3-1.2a4.3 4.3 0 01.2 3.2 4.6 4.6 0 011.2 3.2c0 4.7-2.8 5.7-5.5 6 .5.4.9 1.2.9 2.5v3.6c0 .3.2.7.8.6A12 12 0 0012 .3z"/></svg>
           view code
         </a>
@@ -1193,22 +1193,31 @@ def recommend(title, df, top_n=5):
       submitBtn.innerHTML = 'sending…';
       submitBtn.disabled = true;
 
-      try {
-        const res = await fetch(form.action, {
-          method: 'POST',
-          body: new FormData(form),
-          headers: { 'Accept': 'application/json' }
-        });
+    try {
+  const res = await fetch(form.action, {
+    method: 'POST',
+    body: new FormData(form),
+    headers: {
+      'Accept': 'application/json'
+    }
+  });
 
-        if (res.ok) {
-          formNote.textContent = '✓ message sent — thank you! I\'ll reply soon.';
-          form.reset();
-        } else {
-          throw new Error('Submission failed');
-        }
-      } catch (err) {
-        formNote.textContent = 'Something went wrong — please email me directly instead.';
-      } finally {
+  console.log("Status:", res.status);
+  console.log("OK:", res.ok);
+
+  const text = await res.text();
+  console.log("Response:", text);
+
+  if (res.ok) {
+    formNote.textContent = "✓ Message sent successfully!";
+    form.reset();
+  } else {
+    throw new Error(text);
+  }
+} catch (err) {
+  console.error(err);
+  formNote.textContent = "Something went wrong — please email me directly instead.";
+} finally {
         submitBtn.innerHTML = originalText;
         submitBtn.disabled = false;
       }
