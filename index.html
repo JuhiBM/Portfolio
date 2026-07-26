@@ -1183,8 +1183,38 @@ def recommend(title, df, top_n=5):
 
   /* ---------- 9. Contact form (AJAX submit via FormSubmit) ---------- */
   const form = document.getElementById('contactForm');
-  const formNote = document.getElementById('formNote');
+const formNote = document.getElementById('formNote');
 
+if (form) {
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const submitBtn = form.querySelector('button[type="submit"]');
+    const originalText = submitBtn.innerHTML;
+    submitBtn.innerHTML = 'sending…';
+    submitBtn.disabled = true;
+
+    try {
+      const res = await fetch(form.action, {
+        method: 'POST',
+        body: new FormData(form),
+        headers: { 'Accept': 'application/json' }
+      });
+
+      if (res.ok) {
+        formNote.textContent = '✓ message sent — thank you! I\'ll reply soon.';
+        form.reset();
+      } else {
+        throw new Error('Submission failed');
+      }
+    } catch (err) {
+      formNote.textContent = 'Something went wrong — please email me directly instead.';
+    } finally {
+      submitBtn.innerHTML = originalText;
+      submitBtn.disabled = false;
+    }
+  });
+}
 
 
 });
